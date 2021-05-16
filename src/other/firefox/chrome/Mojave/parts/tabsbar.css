@@ -114,18 +114,14 @@ tab[selected]:-moz-window-inactive {
 }
 
 /* Force tab favicon to the center */
-.tab-throbber, .tab-throbber-fallback {
-	margin-left: auto;
-}
-.tabbrowser-tab:not([busy]) .tab-icon-image {
-	margin-left: auto;
+.tab-throbber, .tab-throbber-fallback,
+.tabbrowser-tab:not([busy]) .tab-icon-image,
+.tabbrowser-tab:not([class*="identity-color-"]) .tab-icon-stack {
+	margin-left: auto !important;
 }
 
 /* If tab favicon is not present, force tab label to the center */
-.tabbrowser-tab .tab-label-container {
-	margin-left: 0 !important;
-}
-.tabbrowser-tab:not([image]):not([busy]):not([progress]) .tab-label-container {
+.tabbrowser-tab:not([image]):not([busy]):not([progress]):not([class*="identity-color-"]) .tab-label-container {
 	margin-left: auto !important;
 }
 
@@ -133,7 +129,8 @@ tab[selected]:-moz-window-inactive {
 #tabbrowser-tabs[closebuttons="activetab"] .tabbrowser-tab:not([selected="true"]) .tab-throbber,
 #tabbrowser-tabs[closebuttons="activetab"] .tabbrowser-tab:not([selected="true"]) .tab-throbber-fallback,
 #tabbrowser-tabs[closebuttons="activetab"] .tabbrowser-tab:not([selected="true"]):not([busy]) .tab-icon-image,
-#tabbrowser-tabs[closebuttons="activetab"] .tabbrowser-tab:not([selected="true"]):not([image]) .tab-label-container {
+#tabbrowser-tabs[closebuttons="activetab"] .tabbrowser-tab:not([selected="true"]):not([image]) .tab-label-container,
+#tabbrowser-tabs[closebuttons="activetab"] .tabbrowser-tab:not([selected="true"]) .tab-icon-stackr {
 	margin-left: 0 !important;
 }
 
@@ -146,6 +143,13 @@ tab[selected]:-moz-window-inactive {
 :root {
 	--gnome-fill-icon: red !important;
 }
+
+.close-icon {
+	height: 16px !important;
+	padding: 0 !important;
+	width: 16px !important;
+}
+
 .tab-close-button {
 	-moz-appearance: none !important;
 	border: none !important;

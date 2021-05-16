@@ -1,8 +1,8 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
-# check command avalibility
-has_command() {
-  "$1" -v $1 > /dev/null 2>&1
+# Check command availability
+function has_command() {
+  command -v $1 > /dev/null
 }
 
 if [ ! "$(which sassc 2> /dev/null)" ]; then
@@ -32,13 +32,29 @@ if [ ! -z "${TRANS_VARIANTS:-}" ]; then
   IFS=', ' read -r -a _TRANS_VARIANTS <<< "${TRANS_VARIANTS:-}"
 fi
 
+_THEME_VARIANTS=('' '-blue' '-purple' '-pink' '-red' '-orange' '-yellow' '-green' '-grey')
+if [ ! -z "${THEME_VARIANTS:-}" ]; then
+  IFS=', ' read -r -a _THEME_VARIANTS <<< "${THEME_VARIANTS:-}"
+fi
+
 for color in "${_COLOR_VARIANTS[@]}"; do
   for trans in "${_TRANS_VARIANTS[@]}"; do
-    sassc $SASSC_OPT src/main/gtk-3.0/gtk${color}${trans}.{scss,css}
-    echo "==> Generating the gtk${color}${trans}.css..."
-    sassc $SASSC_OPT src/main/gnome-shell/gnome-shell${color}${trans}.{scss,css}
-    echo "==> Generating the gnome-shell${color}${trans}.css..."
-    sassc $SASSC_OPT src/main/cinnamon/cinnamon${color}${trans}.{scss,css}
-    echo "==> Generating the cinnamon${color}${trans}.css..."
+    for theme in "${_THEME_VARIANTS[@]}"; do
+      sassc $SASSC_OPT src/main/gtk-3.0/gtk${color}${trans}${theme}.{scss,css}
+      echo "==> Generating the 3.0 gtk${color}${trans}${theme}.css..."
+      sassc $SASSC_OPT src/main/gtk-4.0/gtk${color}${trans}${theme}.{scss,css}
+      echo "==> Generating the 4.0 gtk${color}${trans}${theme}.css..."
+      sassc $SASSC_OPT src/main/gnome-shell/shell-3-28/gnome-shell${color}${trans}${theme}.{scss,css}
+      echo "==> Generating the 3.28 gnome-shell${color}${trans}${theme}.css..."
+      sassc $SASSC_OPT src/main/gnome-shell/shell-40-0/gnome-shell${color}${trans}${theme}.{scss,css}
+      echo "==> Generating the 40.0 gnome-shell${color}${trans}${theme}.css..."
+      sassc $SASSC_OPT src/main/cinnamon/cinnamon${color}${trans}${theme}.{scss,css}
+      echo "==> Generating the cinnamon${color}${trans}${theme}.css..."
+    done
   done
 done
+
+sassc $SASSC_OPT src/other/dash-to-dock/stylesheet.{scss,css}
+echo "==> Generating dash-to-dock stylesheet.css..."
+sassc $SASSC_OPT src/other/dash-to-dock/stylesheet-dark.{scss,css}
+echo "==> Generating dash-to-dock stylesheet-dark.css..."
